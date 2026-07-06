@@ -1,0 +1,32 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: order-service
+  config:
+    import: nacos:order-service.yaml?refresh=true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos
+        import-check:
+          enabled: false
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8080
+      eager: true
+
+dubbo:
+  application:
+    name: order-service
+    logger: slf4j
+  registry:
+    address: nacos://127.0.0.1:8848?username=nacos&password=nacos

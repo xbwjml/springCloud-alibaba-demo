@@ -1,0 +1,33 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+  config:
+    import: optional:nacos:product-service.yaml?refresh=true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos
+        import-check:
+          enabled: false
+
+dubbo:
+  application:
+    name: product-service
+    logger: slf4j
+  protocol:
+    name: dubbo
+    port: 20882
+  registry:
+    address: nacos://127.0.0.1:8848?username=nacos&password=nacos
+  scan:
+    base-packages: com.demo.product.service.impl

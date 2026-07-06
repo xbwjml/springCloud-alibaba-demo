@@ -1,0 +1,71 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  config:
+    import: optional:nacos:gateway.yaml?refresh=true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos
+        import-check:
+          enabled: false
+        shared-configs:
+          - data-id: common-config.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/inventory/**
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8080
+        port: 8719
+      eager: true
+      datasource:
+        gw-route:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-gateway-route-rules.json
+            group: DEFAULT_GROUP
+            data-type: json
+            rule-type: gw_flow
+        gw-api-group:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-gateway-api-rules.json
+            group: DEFAULT_GROUP
+            data-type: json
+            rule-type: gw_api_group
+
+logging:
+  level:
+    com.demo.gateway: DEBUG

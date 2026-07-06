@@ -1,0 +1,33 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: inventory-service
+  config:
+    import: optional:nacos:inventory-service.yaml?refresh=true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos
+        import-check:
+          enabled: false
+
+dubbo:
+  application:
+    name: inventory-service
+    logger: slf4j
+  protocol:
+    name: dubbo
+    port: 20883
+  registry:
+    address: nacos://127.0.0.1:8848?username=nacos&password=nacos
+  scan:
+    base-packages: com.demo.inventory.service.impl
