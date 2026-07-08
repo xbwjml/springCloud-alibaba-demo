@@ -2,6 +2,7 @@ package com.demo.order.service;
 
 import com.demo.common.dto.OrderDTO;
 import com.demo.common.dto.ProductDTO;
+import com.demo.common.result.Result;
 import com.demo.common.service.InventoryService;
 import com.demo.common.service.ProductService;
 import com.demo.order.feign.ProductFeignClient;
@@ -56,7 +57,8 @@ public class OrderService {
     public OrderDTO createOrderViaFeign(Long productId, int quantity) {
         log.info("[Feign] 开始下单: productId={}, quantity={}", productId, quantity);
 
-        ProductDTO product = productFeignClient.getById(productId);
+        Result<ProductDTO> productResult = productFeignClient.getById(productId);
+        ProductDTO product = productResult.getData();
         inventoryService.deduct(productId, quantity);
 
         return buildOrder(product, quantity);

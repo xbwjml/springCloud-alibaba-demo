@@ -1,6 +1,7 @@
 package com.demo.product.controller;
 
 import com.demo.common.dto.ProductDTO;
+import com.demo.common.result.Result;
 import com.demo.product.service.impl.ProductServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,16 +22,16 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getById(@PathVariable Long id) {
-        return productService.getById(id);
+    public Result<ProductDTO> getById(@PathVariable Long id) {
+        return Result.success(productService.getById(id));
     }
 
     @GetMapping("/list")
-    public List<ProductDTO> list() {
-        return List.of(
+    public Result<List<ProductDTO>> list() {
+        return Result.success(List.of(
                 ProductDTO.builder().id(1L).name("iPhone 16 Pro").price(new BigDecimal("8999.00")).stock(100).build(),
                 ProductDTO.builder().id(2L).name("MacBook Pro M4").price(new BigDecimal("14999.00")).stock(50).build(),
                 ProductDTO.builder().id(3L).name("AirPods Pro 3").price(new BigDecimal("1899.00")).stock(200).build()
-        );
+        ));
     }
 }

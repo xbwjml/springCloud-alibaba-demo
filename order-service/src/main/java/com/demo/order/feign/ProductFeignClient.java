@@ -1,6 +1,7 @@
 package com.demo.order.feign;
 
 import com.demo.common.dto.ProductDTO;
+import com.demo.common.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,5 +15,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductFeignClient {
 
     @GetMapping("/{id}")
-    ProductDTO getById(@PathVariable("id") Long id);
+    Result<ProductDTO> getById(@PathVariable("id") Long id);
 }

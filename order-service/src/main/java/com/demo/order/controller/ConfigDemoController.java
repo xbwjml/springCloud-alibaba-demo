@@ -1,5 +1,6 @@
 package com.demo.order.controller;
 
+import com.demo.common.result.Result;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +22,11 @@ public class ConfigDemoController {
     private boolean sendSms;
 
     @GetMapping("/config/demo")
-    public Map<String, Object> demo() {
-        return Map.of(
+    public Result<Map<String, Object>> demo() {
+        return Result.success(Map.of(
                 "timeout", timeout + "ms",
                 "sendSms", sendSms,
                 "tip", "去 Nacos 控制台修改 order-service.yaml，刷新本页看值变化"
-        );
+        ));
     }
 }
