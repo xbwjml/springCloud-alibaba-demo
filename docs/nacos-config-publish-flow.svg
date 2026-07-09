@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1280" viewBox="0 0 1600 1280">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #475569; }
+      .lane-title { font: 700 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #1e293b; }
+      .box-title { font: 700 17px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f172a; }
+      .box-text { font: 400 14px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #475569; }
+      .note-text { font: 500 15px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #334155; }
+      .arrow-text { font: 500 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #64748b; }
+      .box { rx: 12; ry: 12; stroke-width: 1.5; filter: url(#shadow); }
+      .arrow { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1280" fill="#f8fafc"/>
+  <text x="80" y="70" class="title">Nacos 配置发布流程</text>
+  <text x="80" y="104" class="subtitle">从控制台“编辑配置”点击“发布”，到服务端保存、事件通知、客户端拉取新配置、Spring 应用刷新。</text>
+
+  <rect x="70" y="145" width="330" height="1030" fill="#eff6ff" stroke="#bfdbfe" rx="18"/>
+  <rect x="440" y="145" width="330" height="1030" fill="#f0fdf4" stroke="#bbf7d0" rx="18"/>
+  <rect x="810" y="145" width="330" height="1030" fill="#fff7ed" stroke="#fed7aa" rx="18"/>
+  <rect x="1180" y="145" width="330" height="1030" fill="#fdf2f8" stroke="#fbcfe8" rx="18"/>
+
+  <text x="95" y="185" class="lane-title">控制台入口</text>
+  <text x="465" y="185" class="lane-title">配置服务端</text>
+  <text x="835" y="185" class="lane-title">事件与通知</text>
+  <text x="1205" y="185" class="lane-title">客户端与应用</text>
+
+  <rect class="box" x="110" y="230" width="250" height="92" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="130" y="264" class="box-title">Nacos 控制台页面</text>
+  <text x="130" y="292" class="box-text">点击“发布”</text>
+
+  <rect class="box" x="110" y="390" width="250" height="126" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="130" y="424" class="box-title">ConsoleConfigController</text>
+  <text x="130" y="452" class="box-text">validateWithContent</text>
+  <text x="130" y="476" class="box-text">namespace 转换</text>
+  <text x="130" y="500" class="box-text">填充 ConfigRequestInfo</text>
+
+  <rect class="box" x="110" y="585" width="250" height="92" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="130" y="619" class="box-title">ConfigProxy</text>
+  <text x="130" y="647" class="box-text">转发 publishConfig 调用</text>
+
+  <rect class="box" x="480" y="230" width="250" height="126" fill="#ffffff" stroke="#86efac"/>
+  <text x="500" y="264" class="box-title">ConfigOperationService</text>
+  <text x="500" y="292" class="box-text">构造 ConfigInfo</text>
+  <text x="500" y="316" class="box-text">处理 CAS / beta / tag</text>
+  <text x="500" y="340" class="box-text">进入正式发布逻辑</text>
+
+  <rect class="box" x="480" y="425" width="250" height="116" fill="#ffffff" stroke="#86efac"/>
+  <text x="500" y="459" class="box-title">ConfigInfoPersistService</text>
+  <text x="500" y="487" class="box-text">insertOrUpdate</text>
+  <text x="500" y="511" class="box-text">insertOrUpdateCas</text>
+  <text x="500" y="535" class="box-text">返回 lastModified</text>
+
+  <rect class="box" x="480" y="610" width="250" height="104" fill="#ffffff" stroke="#86efac"/>
+  <text x="500" y="644" class="box-title">ConfigChangePublisher</text>
+  <text x="500" y="672" class="box-text">发布 ConfigDataChangeEvent</text>
+  <text x="500" y="696" class="box-text">NotifyCenter.publishEvent</text>
+
+  <rect class="box" x="850" y="230" width="250" height="116" fill="#ffffff" stroke="#fdba74"/>
+  <text x="870" y="264" class="box-title">DumpService</text>
+  <text x="870" y="292" class="box-text">订阅 ConfigDataChangeEvent</text>
+  <text x="870" y="316" class="box-text">创建 DumpRequest</text>
+  <text x="870" y="340" class="box-text">dump 本地缓存</text>
+
+  <rect class="box" x="850" y="415" width="250" height="126" fill="#ffffff" stroke="#fdba74"/>
+  <text x="870" y="449" class="box-title">ConfigCacheService</text>
+  <text x="870" y="477" class="box-text">更新本地磁盘缓存</text>
+  <text x="870" y="501" class="box-text">更新 JVM Cache / md5</text>
+  <text x="870" y="525" class="box-text">发布 LocalDataChangeEvent</text>
+
+  <rect class="box" x="850" y="610" width="250" height="116" fill="#ffffff" stroke="#fdba74"/>
+  <text x="870" y="644" class="box-title">RpcConfigChangeNotifier</text>
+  <text x="870" y="672" class="box-text">订阅 LocalDataChangeEvent</text>
+  <text x="870" y="696" class="box-text">推 ConfigChangeNotifyRequest</text>
+  <text x="870" y="720" class="box-text">只通知“配置变了”</text>
+
+  <rect class="box" x="850" y="795" width="250" height="104" fill="#ffffff" stroke="#fdba74"/>
+  <text x="870" y="829" class="box-title">LongPollingService</text>
+  <text x="870" y="857" class="box-text">订阅 LocalDataChangeEvent</text>
+  <text x="870" y="881" class="box-text">唤醒 HTTP 长轮询客户端</text>
+
+  <rect class="box" x="1220" y="230" width="250" height="126" fill="#ffffff" stroke="#f9a8d4"/>
+  <text x="1240" y="264" class="box-title">Nacos Client</text>
+  <text x="1240" y="292" class="box-text">收到变更通知</text>
+  <text x="1240" y="316" class="box-text">receiveNotifyChanged=true</text>
+  <text x="1240" y="340" class="box-text">consistentWithServer=false</text>
+
+  <rect class="box" x="1220" y="425" width="250" height="126" fill="#ffffff" stroke="#f9a8d4"/>
+  <text x="1240" y="459" class="box-title">ClientWorker</text>
+  <text x="1240" y="487" class="box-text">executeConfigListen</text>
+  <text x="1240" y="511" class="box-text">ConfigBatchListenRequest</text>
+  <text x="1240" y="535" class="box-text">携带本地 md5 检查</text>
+
+  <rect class="box" x="1220" y="620" width="250" height="126" fill="#ffffff" stroke="#f9a8d4"/>
+  <text x="1240" y="654" class="box-title">拉取最新配置</text>
+  <text x="1240" y="682" class="box-text">queryConfigInner</text>
+  <text x="1240" y="706" class="box-text">cacheData.setContent</text>
+  <text x="1240" y="730" class="box-text">checkListenerMd5</text>
+
+  <rect class="box" x="1220" y="815" width="250" height="126" fill="#ffffff" stroke="#f9a8d4"/>
+  <text x="1240" y="849" class="box-title">Spring 应用</text>
+  <text x="1240" y="877" class="box-text">Listener.receiveConfigInfo</text>
+  <text x="1240" y="901" class="box-text">Spring Cloud Alibaba</text>
+  <text x="1240" y="925" class="box-text">发布 RefreshEvent</text>
+
+  <path class="arrow" d="M235 322 L235 382"/>
+  <text x="250" y="357" class="arrow-text">POST</text>
+  <path class="arrow" d="M235 516 L235 577"/>
+  <path class="arrow" d="M360 631 C405 631 425 293 472 293"/>
+  <path class="arrow" d="M605 356 L605 417"/>
+  <path class="arrow" d="M605 541 L605 602"/>
+  <path class="arrow" d="M730 662 C780 662 795 288 842 288"/>
+  <path class="arrow" d="M975 346 L975 407"/>
+  <path class="arrow" d="M975 541 L975 602"/>
+  <path class="arrow dashed" d="M1100 668 C1150 668 1165 293 1212 293"/>
+  <text x="1128" y="542" class="arrow-text">gRPC 通知</text>
+  <path class="arrow dashed" d="M1100 847 C1155 847 1160 488 1212 488"/>
+  <text x="1128" y="780" class="arrow-text">HTTP 长轮询</text>
+  <path class="arrow" d="M1345 356 L1345 417"/>
+  <path class="arrow" d="M1345 551 L1345 612"/>
+  <path class="arrow" d="M1345 746 L1345 807"/>
+
+  <rect x="145" y="1025" width="1310" height="90" fill="#ffffff" stroke="#cbd5e1" rx="14"/>
+  <text x="175" y="1060" class="note-text">核心结论：Nacos Server 推给客户端的是“配置已变更”的通知，不是完整配置内容。</text>
+  <text x="175" y="1090" class="note-text">客户端收到通知后，会再通过查询配置接口拉取最新内容，然后触发本地 Listener。</text>
+</svg>
