@@ -4,7 +4,7 @@ import com.demo.common.dto.ProductDTO;
 import com.demo.common.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * OpenFeign 客户端：通过 HTTP 调用 product-service 的 REST 接口
@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "product-service", path = "/product")
 public interface ProductFeignClient {
 
-    @GetMapping("/{id}")
-    Result<ProductDTO> getById(@PathVariable("id") Long id);
+    @GetMapping("/getById")
+    Result<ProductDTO> getById(@RequestParam("id") Long id);
 }

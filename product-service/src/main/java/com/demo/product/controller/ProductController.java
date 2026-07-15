@@ -4,8 +4,8 @@ import com.demo.common.dto.ProductDTO;
 import com.demo.common.result.Result;
 import com.demo.product.service.impl.ProductServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -21,8 +21,8 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/{id}")
-    public Result<ProductDTO> getById(@PathVariable Long id) {
+    @GetMapping("/getById")
+    public Result<ProductDTO> getById(@RequestParam("id") Long id) {
         return Result.success(productService.getById(id));
     }
 

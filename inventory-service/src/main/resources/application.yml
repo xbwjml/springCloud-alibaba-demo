@@ -29,5 +29,7 @@ dubbo:
     port: 20883
   registry:
     address: nacos://127.0.0.1:8848?username=nacos&password=nacos
+    group: DUBBO_GROUP
+    register-mode: instance
   scan:
     base-packages: com.demo.inventory.service.impl

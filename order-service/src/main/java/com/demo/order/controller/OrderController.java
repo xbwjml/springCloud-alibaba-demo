@@ -29,8 +29,8 @@ public class OrderController {
      * 通过 OpenFeign HTTP 下单
      */
     @PostMapping("/feign")
-    public Result<OrderDTO> createViaFeign(@RequestParam Long productId,
-                                           @RequestParam(defaultValue = "1") int quantity) {
+    public Result<OrderDTO> createViaFeign(@RequestParam("productId") Long productId,
+                                           @RequestParam(value = "quantity", defaultValue = "1") int quantity) {
         OrderDTO order = orderService.createOrderViaFeign(productId, quantity);
         return Result.success(order);
     }
