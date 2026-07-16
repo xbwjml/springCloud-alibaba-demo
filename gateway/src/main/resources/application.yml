@@ -43,7 +43,7 @@ spring:
             - Path=/inventory/**
     sentinel:
       transport:
-        dashboard: 127.0.0.1:8080
+        dashboard: 127.0.0.1:8858
         port: 8719
       eager: true
       datasource:

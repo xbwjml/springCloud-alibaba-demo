@@ -28,5 +28,11 @@
             <artifactId>spring-web</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- 仅声明日志 API，具体实现由各 Spring Boot 服务提供 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>

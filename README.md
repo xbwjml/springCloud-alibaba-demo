@@ -28,7 +28,7 @@
 ```text
 springCloud-alibaba
 ├── common
-│   └── 公共 DTO、Dubbo 服务接口
+│   └── 公共 DTO、Dubbo 服务接口、统一响应和业务异常
 ├── gateway
 │   └── API 网关、路由、鉴权、Sentinel Gateway 配置
 ├── product-service
@@ -82,7 +82,7 @@ springCloud-alibaba
 - Nacos 用户名：`nacos`
 - Nacos 密码：`nacos`
 
-如果需要体验 Sentinel Gateway 限流，还需要额外启动 Sentinel Dashboard，并在配置中准备对应的规则数据。
+如果需要体验 Sentinel Gateway 限流，还需要额外在 `8858` 端口启动 Sentinel Dashboard，并在配置中准备对应的规则数据。
 
 ## 编译项目
 
@@ -146,7 +146,7 @@ curl http://localhost:8080/product/list
 ```bash
 curl \
   -H "Authorization: Bearer demo-token-2024" \
-  http://localhost:8080/product/1
+  "http://localhost:8080/product/getById?id=1"
 ```
 
 ### 通过 Dubbo 创建订单
@@ -218,8 +218,9 @@ order:
 ```json
 [
   {
-    "id": "order-service",
+    "id": "dynamic-order-service",
     "uri": "lb://order-service",
+    "order": -1,
     "predicates": [
       {
         "name": "Path",
@@ -231,6 +232,14 @@ order:
   }
 ]
 ```
+
+动态路由应使用与静态路由不同的 ID，并将 `order` 设为 `-1`，使其优先于静态兜底路由。配置发布后，Gateway 会删除上一版动态路由、注册新路由并刷新路由缓存；发布空配置则会清除动态路由并退回静态路由。
+
+## 统一响应与业务异常
+
+REST 接口统一返回 `Result<T>`。可预期的业务错误使用 `BusinessException`，由 `GlobalExceptionHandler` 转换为 HTTP 400 和对应业务错误码；未处理的系统异常统一返回通用错误信息并记录完整日志。
+
+库存扣减会校验商品 ID 和扣减数量，并使用 CAS 保证并发扣减时不会出现短暂的负库存。
 
 ## Sentinel Gateway 规则
 
@@ -276,7 +285,6 @@ API 分组规则：
 
 ## 适合继续扩展的方向
 
-- 增加统一异常处理和统一响应结构
 - 增加 OpenFeign fallback 或 Sentinel 降级示例
 - 增加 Dubbo 超时、重试、版本号、分组示例
 - 增加 Seata 分布式事务示例

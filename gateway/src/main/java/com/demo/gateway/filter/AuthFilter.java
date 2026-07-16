@@ -7,6 +7,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -51,22 +52,23 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         // 校验 token
         if (!VALID_TOKEN.equals(authHeader)) {
-            log.warn("[Auth] Token 校验失败: {} {} token={}", exchange.getRequest().getMethod(), path, authHeader);
+            log.warn("[Auth] Token 校验失败: {} {}", exchange.getRequest().getMethod(), path);
             exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
             return exchange.getResponse().setComplete();
         }
 
         // 将用户信息写入 Header 透传给下游微服务
-        exchange.getRequest().mutate()
+        ServerHttpRequest request = exchange.getRequest().mutate()
                 .header("X-User-Id", "demo-user-001")
-                .header("X-User-Name", "DemoUser");
+                .header("X-User-Name", "DemoUser")
+                .build();
 
         log.debug("[Auth] 鉴权通过: {} {}", exchange.getRequest().getMethod(), path);
-        return chain.filter(exchange);
+        return chain.filter(exchange.mutate().request(request).build());
     }
 
     private boolean isWhiteListed(String path) {
-        return WHITE_LIST.stream().anyMatch(path::startsWith);
+        return WHITE_LIST.stream().anyMatch(item -> path.equals(item) || path.startsWith(item + "/"));
     }
 
     /** 值越小优先级越高，鉴权要最先执行 */
