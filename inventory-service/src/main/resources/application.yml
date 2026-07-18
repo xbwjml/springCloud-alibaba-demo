@@ -20,6 +20,10 @@ spring:
         password: nacos
         import-check:
           enabled: false
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8090
+      eager: true
 
 dubbo:
   application:

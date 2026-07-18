@@ -34,6 +34,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
+        <!-- Sentinel 基础能力（Dashboard 通信、心跳和指标采集） -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
         <!-- Sentinel Gateway 网关限流（基于路由维度 + API 分组维度） -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
