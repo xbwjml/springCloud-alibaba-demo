@@ -10,6 +10,7 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+        ip: 127.0.0.1
         username: nacos
         password: nacos
       config:
@@ -26,6 +27,7 @@ dubbo:
     logger: slf4j
   protocol:
     name: dubbo
+    host: 127.0.0.1
     port: 20882
   registry:
     address: nacos://127.0.0.1:8848?username=nacos&password=nacos
