@@ -2,6 +2,7 @@ package com.demo.order.service;
 
 import com.demo.common.dto.OrderDTO;
 import com.demo.common.dto.ProductDTO;
+import com.demo.common.exception.BusinessException;
 import com.demo.common.result.Result;
 import com.demo.common.service.InventoryService;
 import com.demo.common.service.ProductService;
@@ -58,6 +59,12 @@ public class OrderService {
         log.info("[Feign] 开始下单: productId={}, quantity={}", productId, quantity);
 
         Result<ProductDTO> productResult = productFeignClient.getById(productId);
+        if (productResult == null) {
+            throw new BusinessException(503, "商品服务未返回结果");
+        }
+        if (!productResult.isSuccess() || productResult.getData() == null) {
+            throw new BusinessException(productResult.getCode(), productResult.getMessage());
+        }
         ProductDTO product = productResult.getData();
         inventoryService.deduct(productId, quantity);
 

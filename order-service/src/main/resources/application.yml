@@ -25,6 +25,11 @@ spring:
         dashboard: 127.0.0.1:8858
       eager: true
 
+# 开启 Sentinel 对 OpenFeign 调用的保护和兜底处理
+feign:
+  sentinel:
+    enabled: true
+
 dubbo:
   application:
     name: order-service

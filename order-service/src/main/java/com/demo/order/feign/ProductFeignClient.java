@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 演示与 Dubbo 并存的场景（例如跨语言调用、外部 API）
  * 实际生产中对内部微服务优先用 Dubbo，Feign 常用于对接外部系统
  */
-@FeignClient(name = "product-service", path = "/product")
+@FeignClient(
+        name = "product-service",
+        path = "/product",
+        fallbackFactory = ProductFeignFallbackFactory.class
+)
 public interface ProductFeignClient {
 
     @GetMapping("/getById")

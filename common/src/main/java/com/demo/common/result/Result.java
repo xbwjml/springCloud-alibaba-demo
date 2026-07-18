@@ -38,11 +38,11 @@ public class Result<T> implements Serializable {
         return new Result<>(SUCCESS_CODE, "success", null);
     }
 
-    public static Result<Void> fail(String message) {
+    public static <T> Result<T> fail(String message) {
         return fail(ERROR_CODE, message);
     }
 
-    public static Result<Void> fail(int code, String message) {
+    public static <T> Result<T> fail(int code, String message) {
         return new Result<>(code, message, null);
     }
 
