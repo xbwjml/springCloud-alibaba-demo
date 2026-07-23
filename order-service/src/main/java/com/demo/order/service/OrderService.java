@@ -2,11 +2,9 @@ package com.demo.order.service;
 
 import com.demo.common.dto.OrderDTO;
 import com.demo.common.dto.ProductDTO;
-import com.demo.common.exception.BusinessException;
-import com.demo.common.result.Result;
 import com.demo.common.service.InventoryService;
 import com.demo.common.service.ProductService;
-import com.demo.order.feign.ProductFeignClient;
+import com.demo.order.client.ProductClientFacade;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +30,12 @@ public class OrderService {
     private InventoryService inventoryService;   // Dubbo 扣库存
 
     // ========== OpenFeign HTTP 调用 ==========
-    private final ProductFeignClient productFeignClient;
+    private final ProductClientFacade productClientFacade;
 
     private final AtomicLong orderIdGenerator = new AtomicLong(1);
 
-    public OrderService(ProductFeignClient productFeignClient) {
-        this.productFeignClient = productFeignClient;
+    public OrderService(ProductClientFacade productClientFacade) {
+        this.productClientFacade = productClientFacade;
     }
 
     /**
@@ -58,14 +56,7 @@ public class OrderService {
     public OrderDTO createOrderViaFeign(Long productId, int quantity) {
         log.info("[Feign] 开始下单: productId={}, quantity={}", productId, quantity);
 
-        Result<ProductDTO> productResult = productFeignClient.getById(productId);
-        if (productResult == null) {
-            throw new BusinessException(503, "商品服务未返回结果");
-        }
-        if (!productResult.isSuccess() || productResult.getData() == null) {
-            throw new BusinessException(productResult.getCode(), productResult.getMessage());
-        }
-        ProductDTO product = productResult.getData();
+        ProductDTO product = productClientFacade.getById(productId);
         inventoryService.deduct(productId, quantity);
 
         return buildOrder(product, quantity);

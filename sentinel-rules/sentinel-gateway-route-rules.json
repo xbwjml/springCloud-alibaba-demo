@@ -1,0 +1,32 @@
+[
+  {
+    "resource": "product-service",
+    "resourceMode": 0,
+    "grade": 1,
+    "count": 100,
+    "intervalSec": 1,
+    "controlBehavior": 0,
+    "burst": 20,
+    "maxQueueingTimeoutMs": 0
+  },
+  {
+    "resource": "order-service",
+    "resourceMode": 0,
+    "grade": 1,
+    "count": 50,
+    "intervalSec": 1,
+    "controlBehavior": 0,
+    "burst": 10,
+    "maxQueueingTimeoutMs": 0
+  },
+  {
+    "resource": "product-query-api",
+    "resourceMode": 1,
+    "grade": 1,
+    "count": 80,
+    "intervalSec": 1,
+    "controlBehavior": 0,
+    "burst": 10,
+    "maxQueueingTimeoutMs": 0
+  }
+]

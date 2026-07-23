@@ -17,13 +17,14 @@ public class InventoryController {
     }
 
     @PostMapping("/deduct")
-    public Result<Map<String, Object>> deduct(@RequestParam Long productId, @RequestParam int quantity) {
+    public Result<Map<String, Object>> deduct(@RequestParam("productId") Long productId,
+                                              @RequestParam("quantity") int quantity) {
         int remaining = inventoryService.deduct(productId, quantity);
         return Result.success(Map.of("productId", productId, "quantity", quantity, "remaining", remaining));
     }
 
     @GetMapping("/stock/{productId}")
-    public Result<Map<String, Object>> getStock(@PathVariable Long productId) {
+    public Result<Map<String, Object>> getStock(@PathVariable("productId") Long productId) {
         int stock = inventoryService.getStock(productId);
         return Result.success(Map.of("productId", productId, "stock", stock));
     }

@@ -47,6 +47,9 @@ spring:
         dashboard: 127.0.0.1:8090
         port: 8719
       eager: true
+      # Gateway 使用路由/API 分组资源，关闭普通 WebFlux URL 埋点以免资源重复
+      filter:
+        enabled: false
       datasource:
         gw-route:
           nacos:
@@ -54,18 +57,27 @@ spring:
             username: nacos
             password: nacos
             data-id: sentinel-gateway-route-rules.json
-            group: DEFAULT_GROUP
+            group-id: DEFAULT_GROUP
             data-type: json
-            rule-type: gw_flow
+            rule-type: gw-flow
         gw-api-group:
           nacos:
             server-addr: 127.0.0.1:8848
             username: nacos
             password: nacos
             data-id: sentinel-gateway-api-rules.json
-            group: DEFAULT_GROUP
+            group-id: DEFAULT_GROUP
             data-type: json
-            rule-type: gw_api_group
+            rule-type: gw-api-group
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,sentinel
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 logging:
   level:

@@ -23,12 +23,49 @@ spring:
     sentinel:
       transport:
         dashboard: 127.0.0.1:8090
+        port: 8722
       eager: true
+      datasource:
+        flow:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-order-service-flow-rules.json
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+        degrade:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-order-service-degrade-rules.json
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: degrade
+
+    # 单次调用必须先有明确超时，熔断只负责阻止后续请求继续打向故障服务
+    openfeign:
+      client:
+        config:
+          product-service:
+            connect-timeout: 1000
+            read-timeout: 1500
 
 # 开启 Sentinel 对 OpenFeign 调用的保护和兜底处理
 feign:
   sentinel:
     enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,sentinel
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 dubbo:
   application:

@@ -1,0 +1,19 @@
+[
+  {
+    "resource": "product.queryById",
+    "paramIdx": 0,
+    "grade": 1,
+    "count": 50,
+    "controlBehavior": 0,
+    "maxQueueingTimeMs": 0,
+    "burstCount": 0,
+    "durationInSec": 1,
+    "paramFlowItemList": [
+      {
+        "object": "1",
+        "count": 10,
+        "classType": "java.lang.Long"
+      }
+    ]
+  }
+]

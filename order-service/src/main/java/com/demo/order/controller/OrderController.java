@@ -19,8 +19,8 @@ public class OrderController {
      * 通过 Dubbo RPC 下单
      */
     @PostMapping("/dubbo")
-    public Result<OrderDTO> createViaDubbo(@RequestParam Long productId,
-                                           @RequestParam(defaultValue = "1") int quantity) {
+    public Result<OrderDTO> createViaDubbo(@RequestParam("productId") Long productId,
+                                           @RequestParam(value = "quantity", defaultValue = "1") int quantity) {
         OrderDTO order = orderService.createOrderViaDubbo(productId, quantity);
         return Result.success(order);
     }

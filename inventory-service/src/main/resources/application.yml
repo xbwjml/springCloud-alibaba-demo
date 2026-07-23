@@ -23,7 +23,36 @@ spring:
     sentinel:
       transport:
         dashboard: 127.0.0.1:8090
+        port: 8721
       eager: true
+      datasource:
+        flow:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-inventory-service-flow-rules.json
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+        degrade:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            username: nacos
+            password: nacos
+            data-id: sentinel-inventory-service-degrade-rules.json
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: degrade
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,sentinel
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 dubbo:
   application:

@@ -1,0 +1,11 @@
+[
+  {
+    "apiName": "product-query-api",
+    "predicateItems": [
+      {
+        "pattern": "/product/",
+        "matchStrategy": 1
+      }
+    ]
+  }
+]

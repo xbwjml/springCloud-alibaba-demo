@@ -1,0 +1,10 @@
+[
+  {
+    "resource": "product.queryById",
+    "grade": 1,
+    "count": 100,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false
+  }
+]

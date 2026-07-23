@@ -30,7 +30,8 @@ public class SentinelGatewayConfig {
     @PostConstruct
     public void initBlockHandlers() {
         BlockRequestHandler blockRequestHandler = (serverWebExchange, throwable) -> {
-            log.warn("[Sentinel] 请求被限流/熔断: {}", serverWebExchange.getRequest().getURI());
+            log.warn("[Sentinel] Gateway 请求被拒绝: path={}, type={}",
+                    serverWebExchange.getRequest().getPath(), throwable.getClass().getSimpleName());
             Map<String, Object> body = Map.of(
                     "code", 429,
                     "message", "请求过于频繁，请稍后再试",

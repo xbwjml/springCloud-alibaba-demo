@@ -17,7 +17,9 @@ public class ProductFeignFallbackFactory implements FallbackFactory<ProductFeign
 
     @Override
     public ProductFeignClient create(Throwable cause) {
-        log.warn("调用 product-service 失败，执行 Feign 兜底", cause);
+        log.warn("调用 product-service 失败，执行 Feign 兜底: type={}, message={}",
+                cause.getClass().getSimpleName(), cause.getMessage());
+        log.debug("product-service Feign 失败详情", cause);
         return id -> Result.fail(SERVICE_UNAVAILABLE, "商品服务暂时不可用，请稍后重试");
     }
 }

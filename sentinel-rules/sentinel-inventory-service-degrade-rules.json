@@ -1,0 +1,10 @@
+[
+  {
+    "resource": "inventory.deduct",
+    "grade": 1,
+    "count": 0.5,
+    "minRequestAmount": 20,
+    "statIntervalMs": 10000,
+    "timeWindow": 10
+  }
+]
